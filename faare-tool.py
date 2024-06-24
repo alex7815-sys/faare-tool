@@ -1,5 +1,6 @@
 import requests
 import time  # Import time module for sleep function
+import sys  # Import sys for command-line arguments
 from bs4 import BeautifulSoup
 
 def report_facebook_account(account_url, reason, num_reports=1):
@@ -30,11 +31,14 @@ def report_facebook_account(account_url, reason, num_reports=1):
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-# Example usage
+# Main block to accept command-line arguments
 if __name__ == '__main__':
-    # Replace these values with actual Facebook account URL, reason for reporting, and number of reports
-    account_url = 'https://www.facebook.com/example_account'
-    reason_for_reporting = 'This account is posting harmful content.'
-    num_reports = 100  # Number of times to report the account
+    if len(sys.argv) != 4:
+        print("Usage: python3 report_tool.py <account_url> <reason_for_reporting> <num_reports>")
+        sys.exit(1)
+
+    account_url = sys.argv[1]
+    reason_for_reporting = sys.argv[2]
+    num_reports = int(sys.argv[3])
 
     report_facebook_account(account_url, reason_for_reporting, num_reports)
