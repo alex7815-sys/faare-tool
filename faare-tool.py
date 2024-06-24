@@ -1,11 +1,12 @@
 import requests
-import time
-import logging
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import time  # Import time module for sleep function
+from bs4 import BeautifulSoup
 
 def report_facebook_account(account_url, reason, num_reports=1):
+    # Replace with actual Facebook reporting URL and form data
     report_url = 'https://www.facebook.com/help/contact/1448613805579647'
+
+    # Example form data (replace with actual fields based on Facebook's form)
     data = {
         'url': account_url,
         'reason': reason,
@@ -14,30 +15,26 @@ def report_facebook_account(account_url, reason, num_reports=1):
 
     try:
         for i in range(num_reports):
+            # Send POST request to submit the report
             response = requests.post(report_url, data=data)
+
+            # Check response status
             if response.status_code == 200:
-                logging.info(f"Report {i+1}/{num_reports} submitted successfully.")
+                print(f"Report {i+1} submitted successfully.")
             else:
-                logging.error(f"Failed to submit report {i+1}. Status code: {response.status_code}")
-            
-            time.sleep(1)  # Introduce a 1-second delay between requests to avoid rate limiting
+                print(f"Failed to submit report {i+1}. Status code: {response.status_code}")
+
+            # Introduce a delay between requests (optional but recommended to avoid rate limiting or blocking)
+            time.sleep(1)  # Sleep for 1 second between requests
 
     except requests.exceptions.RequestException as e:
-        logging.error(f"An error occurred: {e}")
+        print(f"An error occurred: {e}")
 
+# Example usage
 if __name__ == '__main__':
-    try:
-        account_url = input("Enter the Facebook account URL to report: ")
-        reason_for_reporting = input("Enter the reason for reporting: ")
-        num_reports = int(input("Enter the number of times to report the account (default is 1): ") or 1)
+    # Replace these values with actual Facebook account URL, reason for reporting, and number of reports
+    account_url = 'https://www.facebook.com/example_account'
+    reason_for_reporting = 'This account is posting harmful content.'
+    num_reports = 100  # Number of times to report the account
 
-        report_facebook_account(account_url, reason_for_reporting, num_reports)
-
-    except ValueError:
-        logging.error("Invalid input. Please enter a valid number for the number of reports.")
-
-    except KeyboardInterrupt:
-        logging.info("Reporting process interrupted by user.")
-
-    except Exception as ex:
-        logging.error(f"Unexpected error: {ex}")
+    report_facebook_account(account_url, reason_for_reporting, num_reports)
